@@ -112,7 +112,7 @@ export class OpenExchangeRatesService {
   public get request () {
     return {
       rates: () => this.getLatestRates(),
-      currencies: () => this.getSupportedCurrencies(),
+      names: () => this.getSupportedCurrencies(),
       conversion: (value: number, from: string, to: string) =>
         this.getConversionRateForPair(value, from, to)
     }
