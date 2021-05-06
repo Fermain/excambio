@@ -10,13 +10,13 @@
 </template>
 
 <script lang="ts">
-import { CurrencyList, OpenExchangeRatesService } from '@/services/open-exchange-rates.service'
+import { CurrencyNames, OpenExchangeRatesService } from '@/services/open-exchange-rates.service'
 import { Vue } from 'vue-class-component'
 
 export default class Home extends Vue {
   private service = new OpenExchangeRatesService('')
 
-  private currencies: CurrencyList = {}
+  private currencies: CurrencyNames = {}
 
   async mounted (): Promise<void> {
     this.currencies = await this.service.request.currencies()
