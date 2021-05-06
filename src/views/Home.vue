@@ -1,12 +1,25 @@
 <template>
   <div class="home">
     <h1>Excambio</h1>
+    <ul>
+      <li v-for="(value, key) in currencies" :key="key">
+        <b>{{ key }}:</b> {{value}}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import { CurrencyList, OpenExchangeRatesService } from '@/services/open-exchange-rates.service'
+import { Vue } from 'vue-class-component'
 
-@Options({})
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  private service = new OpenExchangeRatesService('')
+
+  private currencies: CurrencyList = {}
+
+  async mounted (): Promise<void> {
+    this.currencies = await this.service.request.currencies()
+  }
+}
 </script>
