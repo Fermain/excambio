@@ -1,34 +1,4 @@
-export interface CurrencyNames {
-  [key: string]: string;
-}
-
-export interface CurrencyRates {
-  [key: string]: number;
-}
-
-export interface Conversion {
-  disclaimer: string;
-  license: string;
-  request: {
-    query: string;
-    amount: number;
-    from: string;
-    to: string;
-  };
-  meta: {
-    timestamp: number;
-    rate: number;
-  };
-  response: number;
-}
-
-export interface LatestRates {
-    disclaimer: string,
-    license: string,
-    timestamp: number,
-    base: string,
-    rates: CurrencyRates
-}
+import { Conversion, CurrencyNames, LatestRates } from '@/models'
 
 export class OpenExchangeRatesService {
   private baseUrl: URL;
