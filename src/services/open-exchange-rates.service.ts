@@ -1,10 +1,11 @@
-import { Conversion, CurrencyNames, LatestRates } from '@/models'
+import { EMPTY_CURRENCY_NAMES, EMPTY_LATEST_RATES } from '@/data'
+import { CurrencyNames, LatestRates } from '@/models'
 
-export default class OpenExchangeRatesService {
+export class OpenExchangeRatesService {
   private baseUrl: URL;
 
   constructor (
-    private appId: string,
+    private appId: string = process.env.VUE_APP_OPENAPI_API_ID,
     private apiHost = 'https://openexchangerates.org/'
   ) {
     this.baseUrl = new URL(apiHost)
@@ -18,13 +19,13 @@ export default class OpenExchangeRatesService {
    * and provides surface area for notification and error handlers.
    *
    */
-  private async fetch<T> (url: URL, options?: RequestInit) {
+  private async fetch<T> (url: URL, options?: RequestInit, fallback?: any) {
     try {
       const response = await fetch(url.href, options)
       return (await response.json()) as T
     } catch (error) {
       // Error reporting service - There was a network error
-      return {}
+      return fallback
     }
   }
 
@@ -38,27 +39,13 @@ export default class OpenExchangeRatesService {
   private async getSupportedCurrencies (): Promise<CurrencyNames> {
     const url = new URL('api/currencies.json', this.baseUrl)
 
-    return await this.fetch<CurrencyNames>(url, {
-      method: 'GET'
-    })
-  }
-
-  /**
-   * ## GET conversion rate for a given pair
-   * _Calculate exchange value of a given sum converting out of "from" currency and into "to" currency_
-   *
-   */
-  private async getConversionRateForPair (
-    value: number,
-    from: string,
-    to: string
-  ): Promise<Conversion | Record<string, unknown>> {
-    const url = new URL(`api/convert/${value}/${from}/${to}`, this.baseUrl)
-    url.searchParams.append('app_id', process.env.VUE_APP_OPENAPI_API_ID)
-
-    return await this.fetch<Conversion>(url, {
-      method: 'GET'
-    })
+    return await this.fetch<CurrencyNames>(
+      url,
+      {
+        method: 'GET'
+      },
+      EMPTY_CURRENCY_NAMES
+    )
   }
 
   /**
@@ -66,25 +53,30 @@ export default class OpenExchangeRatesService {
    * _Returns a list of all supported currencies, and their spot rates relative to the base currency for this App ID (USD)._
    *
    */
-  private async getLatestRates (): Promise<LatestRates | Record<string, unknown>> {
+  private async getLatestRates (): Promise<LatestRates> {
     const url = new URL('api/latest.json', this.baseUrl)
     url.searchParams.append('app_id', process.env.VUE_APP_OPENAPI_API_ID)
 
-    return await this.fetch<LatestRates>(url, {
-      method: 'GET'
-    })
+    return await this.fetch<LatestRates>(
+      url,
+      {
+        method: 'GET'
+      },
+      EMPTY_LATEST_RATES
+    )
   }
 
   /**
-   * ## Public Interface for this service
+   * ## Public Proxy Interface for this service
    *
    */
-  public get request () {
+  public get request (): {
+    rates: () => Promise<LatestRates>;
+    names: () => Promise<CurrencyNames>;
+    } {
     return {
       rates: () => this.getLatestRates(),
-      names: () => this.getSupportedCurrencies(),
-      conversion: (value: number, from: string, to: string) =>
-        this.getConversionRateForPair(value, from, to)
+      names: () => this.getSupportedCurrencies()
     }
   }
 }
