@@ -38,27 +38,13 @@ export default class OpenExchangeRatesService {
   private async getSupportedCurrencies (): Promise<CurrencyNames> {
     const url = new URL('api/currencies.json', this.baseUrl)
 
-    return await this.fetch<CurrencyNames>(url, {
-      method: 'GET'
-    })
-  }
-
-  /**
-   * ## GET conversion rate for a given pair
-   * _Calculate exchange value of a given sum converting out of "from" currency and into "to" currency_
-   *
-   */
-  private async getConversionRateForPair (
-    value: number,
-    from: string,
-    to: string
-  ): Promise<Conversion | Record<string, unknown>> {
-    const url = new URL(`api/convert/${value}/${from}/${to}`, this.baseUrl)
-    url.searchParams.append('app_id', process.env.VUE_APP_OPENAPI_API_ID)
-
-    return await this.fetch<Conversion>(url, {
-      method: 'GET'
-    })
+    return await this.fetch<CurrencyNames>(
+      url,
+      {
+        method: 'GET'
+      },
+      EMPTY_CURRENCY_NAMES
+    )
   }
 
   /**
