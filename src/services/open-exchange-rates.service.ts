@@ -1,6 +1,6 @@
 import { Conversion, CurrencyNames, LatestRates } from '@/models'
 
-export class OpenExchangeRatesService {
+export default class OpenExchangeRatesService {
   private baseUrl: URL;
 
   constructor (
