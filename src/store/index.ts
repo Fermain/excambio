@@ -1,14 +1,25 @@
+import { EMPTY_CURRENCY_NAMES, EMPTY_LATEST_RATES } from '@/data'
 import { CurrencyNames, LatestRates } from '@/models'
-import OpenExchangeRatesService from '@/services/open-exchange-rates.service'
+import { OpenExchangeRatesService } from '@/services'
+import { InjectionKey } from 'vue'
 
-import { createStore } from 'vuex'
+import { createStore, Store } from 'vuex'
 
-const service = new OpenExchangeRatesService(process.env.VUE_APP_OPENAPI_API_ID)
+const service = new OpenExchangeRatesService()
 
-export default createStore({
+export interface State {
+  names: CurrencyNames;
+  rates: LatestRates;
+  loading: boolean;
+}
+
+export const key: InjectionKey<Store<State>> = Symbol('App')
+
+export const store = createStore<State>({
   state: {
-    names: {},
-    rates: {}
+    names: EMPTY_CURRENCY_NAMES,
+    rates: EMPTY_LATEST_RATES,
+    loading: true
   },
   mutations: {
     updateCurrencyNames (state, names: CurrencyNames) {
@@ -16,6 +27,9 @@ export default createStore({
     },
     updateCurrencyRates (state, rates: LatestRates) {
       state.rates = rates
+    },
+    updateLoadStatus (state, value: boolean) {
+      state.loading = value
     }
   },
   actions: {
@@ -44,6 +58,10 @@ export default createStore({
     async resetCurrencyRates (context) {
       context.commit('updateCurrencyRates', {})
       return {}
+    },
+    async updateLoadStatus (context, value: boolean) {
+      context.commit('updateLoadStatus', value)
+      return value
     }
   }
 })
