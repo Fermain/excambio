@@ -22,11 +22,14 @@ module.exports = {
         '**/__tests__/*.{j,t}s?(x)',
         '**/tests/unit/**/*.spec.{j,t}s?(x)'
       ],
-      rules: {
-        '@typescript-eslint/explicit-module-boundary-types': ['error']
-      },
       env: {
         jest: true
+      }
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': ['error']
       }
     }
   ]
