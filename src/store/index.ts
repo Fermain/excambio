@@ -22,22 +22,28 @@ export default createStore({
     async getCurrencyNames (context) {
       const names = await service.request.names()
       context.commit('updateCurrencyNames', names)
+      return names
     },
-    updateCurrencyNames (context, names: CurrencyNames) {
+    async updateCurrencyNames (context, names: CurrencyNames) {
       context.commit('updateCurrencyNames', names)
+      return names
     },
-    resetCurrencyNames (context) {
+    async resetCurrencyNames (context) {
       context.commit('updateCurrencyNames', {})
+      return {}
     },
     async getCurrencyRates (context) {
       const rates = await service.request.rates()
       context.commit('updateCurrencyRates', rates)
+      return rates
     },
-    updateCurrencyRates (context, rates: LatestRates) {
+    async updateCurrencyRates (context, rates: LatestRates) {
       context.commit('updateCurrencyRates', rates)
+      return rates
     },
-    resetCurrencyRates (context) {
+    async resetCurrencyRates (context) {
       context.commit('updateCurrencyRates', {})
+      return {}
     }
   }
 })
