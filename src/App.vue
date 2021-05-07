@@ -1,33 +1,45 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link>
-  </div>
+  <ui-header/>
   <router-view/>
+  <ui-footer/>
 </template>
 
 <script lang="ts">
+import UiHeader from './components/ui/Header.vue'
+import UiFooter from './components/ui/Footer.vue'
+
 import { CurrencyNames, LatestRates } from '@/models'
 import { Options, Vue } from 'vue-class-component'
-import { mapActions } from 'vuex'
+import { mapActions, useStore } from 'vuex'
+import { key } from './store'
 
 @Options({
   methods: {
     ...mapActions({
       getCurrencyNames: 'getCurrencyNames',
-      resetCurrencyNames: 'resetCurrencyNames',
       getCurrencyRates: 'getCurrencyRates',
-      resetCurrencyRates: 'resetCurrencyRates'
+      updateLoadStatus: 'updateLoadStatus'
     })
+  },
+  components: {
+    UiHeader,
+    UiFooter
   }
 })
 export default class App extends Vue {
   getCurrencyNames!: () => Promise<CurrencyNames>;
-  resetCurrencyNames!: () => Promise<CurrencyNames>;
   getCurrencyRates!: () => Promise<LatestRates>;
-  resetCurrencyRates!: () => Promise<Record<string, unknown>>;
+  updateLoadStatus!: (value: boolean) => Promise<boolean>
+
+  private store = useStore(key)
+
+  public get loading () {
+    return this.store.state.loading
+  }
 
   async mounted (): Promise<void> {
     await Promise.all([this.getCurrencyNames(), this.getCurrencyRates()])
+    this.updateLoadStatus(false)
   }
 }
 </script>
