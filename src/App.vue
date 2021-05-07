@@ -1,6 +1,8 @@
 <template>
   <ui-header/>
-  <router-view/>
+  <div class="view">
+    <router-view/>
+  </div>
   <ui-footer/>
 </template>
 
@@ -45,5 +47,28 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+@use './styles/reset';
+@use './styles/font';
 
+#app {
+  color: rgb(18, 22, 24);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.view {
+  flex: 1 0 auto;
+  background: white;
+  z-index: 9;
+}
+
+.logo {
+  margin: 0;
+  max-width: 3rem;
+}
+
+.page {
+  padding: 0.5rem;
+}
 </style>
