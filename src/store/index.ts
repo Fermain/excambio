@@ -1,4 +1,3 @@
-
 import { CurrencyNames, LatestRates } from '@/models'
 import OpenExchangeRatesService from '@/services/open-exchange-rates.service'
 
