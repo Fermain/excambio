@@ -1,4 +1,6 @@
-import { CurrencyNames, CurrencyRates, LatestRates, OpenExchangeRatesService } from '@/services/open-exchange-rates.service'
+
+import { CurrencyNames, LatestRates } from '@/models'
+import { OpenExchangeRatesService } from '@/services/open-exchange-rates.service'
 import { createStore } from 'vuex'
 
 const service = new OpenExchangeRatesService(process.env.VUE_APP_OPENAPI_API_ID)
