@@ -14,7 +14,11 @@
           {{ currency.name }}
         </td>
         <td>
-          <input type="number" v-model="values[currency.code]" @change="onValueChange($event, currency)">
+          <input
+            type="number"
+            v-model="values[currency.code]"
+            @change="onValueChange($event, currency)"
+          />
         </td>
       </tr>
     </thead>
@@ -27,7 +31,11 @@
           {{ currency.name }}
         </td>
         <td>
-          <input type="number" v-model="values[currency.code]" @change="onValueChange($event, currency)">
+          <input
+            type="number"
+            v-model="values[currency.code]"
+            @change="onValueChange($event, currency)"
+          />
         </td>
       </tr>
     </tbody>
@@ -48,9 +56,13 @@ export default class ExchangeList extends Vue {
   }
 
   public get currencies (): Currency[] {
-    return this.store.getters.currencyListSearchFilter.filter((currency: Currency) => {
-      return !this.selected.find(selection => selection.code === currency.code)
-    })
+    return this.store.getters.currencyListSearchFilter.filter(
+      (currency: Currency) => {
+        return !this.selected.find(
+          (selection) => selection.code === currency.code
+        )
+      }
+    )
   }
 
   public get columns () {
@@ -90,7 +102,6 @@ export default class ExchangeList extends Vue {
 
   public onValueChange ({ target }: Event, currency: Currency) {
     const value = Number((target as HTMLInputElement).value)
-    console.log(value, currency.rate, value / currency.rate)
     this.valueUSD = value / currency.rate
   }
 }
@@ -113,17 +124,38 @@ table {
     }
   }
 
+  tbody {
+    tr {
+      &:nth-child(2n) {
+        td {
+          background: #c6c7c8;
+        }
+      }
+    }
+  }
+
   td,
   th {
     padding: 0.25rem;
+
+    input {
+      border: none;
+      background: none;
+      width: 100%;
+      color: var(--color-dark);
+    }
   }
 
   tr {
     &.selection,
     &:hover {
       td {
-        background: var(--color-dark);
-        color: var(--color-light);
+        background: var(--color-dark) !important;
+        color: var(--color-light) !important;
+
+        input {
+          color: var(--color-light);
+        }
       }
     }
 
