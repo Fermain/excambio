@@ -2,22 +2,31 @@ import { EMPTY_CURRENCY_NAMES, EMPTY_LATEST_RATES } from '@/data'
 import { Currency, CurrencyNames, LatestRates } from '@/models'
 import { OpenExchangeRatesService } from '@/services'
 import { InjectionKey } from 'vue'
+import VuexPersistence from 'vuex-persist'
 
 import { createStore, Store } from 'vuex'
 
 const service = new OpenExchangeRatesService()
 
 export interface State {
+  value: number;
+  search: string;
   names: CurrencyNames;
   latest: LatestRates;
   selected: Currency[];
   loading: boolean;
 }
 
+const vuexLocal = new VuexPersistence<State>({
+  storage: window.localStorage
+})
+
 export const key: InjectionKey<Store<State>> = Symbol('App')
 
 export const store = createStore<State>({
   state: {
+    value: 1,
+    search: '',
     names: EMPTY_CURRENCY_NAMES,
     latest: EMPTY_LATEST_RATES,
     selected: [],
@@ -35,6 +44,12 @@ export const store = createStore<State>({
     },
     updateSelected (state, currencies: Currency[]) {
       state.selected = currencies
+    },
+    setSearchTerm (state, term: string) {
+      state.search = term
+    },
+    setConversionValue (state, value: number) {
+      state.value = value
     }
   },
   getters: {
@@ -45,6 +60,12 @@ export const store = createStore<State>({
           name: keyvalue[1],
           rate: state.latest.rates[keyvalue[0]]
         } as Currency
+      })
+    },
+    currencyListSearchFilter (state, getters): Currency[] {
+      return getters.currencyList.filter((currency: Currency) => {
+        const fields = [currency.name, currency.code]
+        return Boolean(fields.filter(field => field.toLowerCase().search(state.search.toLowerCase()) !== -1).length)
       })
     }
   },
@@ -99,6 +120,13 @@ export const store = createStore<State>({
       } else {
         context.dispatch('pushSelected', value)
       }
+    },
+    async setSearchTerm (context, term = '') {
+      context.commit('setSearchTerm', term)
+    },
+    async setConversionValue (context, value = 1) {
+      context.commit('setConversionValue', value)
     }
-  }
+  },
+  plugins: [vuexLocal.plugin]
 })
