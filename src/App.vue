@@ -51,15 +51,17 @@ export default class App extends Vue {
 @use './styles/font';
 
 #app {
-  color: rgb(18, 22, 24);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  --color-dark: rgb(18, 22, 24);
+  --color-light: rgb(255, 255, 255);
+  color: var(--color-dark);
 }
 
 .view {
   flex: 1 0 auto;
-  background: white;
+  background: var(--color-light);;
   z-index: 9;
 }
 
