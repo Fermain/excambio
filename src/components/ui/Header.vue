@@ -34,6 +34,8 @@ export default class UiHeader extends Vue {}
   z-index: 10;
 
   padding: 0.5rem;
+  background: #ffffff47;
+  backdrop-filter: blur(5px);
 
   h1 {
     margin: 0;

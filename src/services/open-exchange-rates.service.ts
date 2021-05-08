@@ -71,11 +71,11 @@ export class OpenExchangeRatesService {
    *
    */
   public get request (): {
-    rates: () => Promise<LatestRates>;
+    latest: () => Promise<LatestRates>;
     names: () => Promise<CurrencyNames>;
     } {
     return {
-      rates: () => this.getLatestRates(),
+      latest: () => this.getLatestRates(),
       names: () => this.getSupportedCurrencies()
     }
   }
