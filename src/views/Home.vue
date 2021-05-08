@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <exchange-list />
+    <exchange-pair />
   </div>
 </template>
 
