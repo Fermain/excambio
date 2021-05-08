@@ -1,5 +1,5 @@
 import { EMPTY_CURRENCY_NAMES, EMPTY_LATEST_RATES } from '@/data'
-import { CurrencyNames, LatestRates } from '@/models'
+import { Currency, CurrencyNames, LatestRates } from '@/models'
 import { OpenExchangeRatesService } from '@/services'
 import { InjectionKey } from 'vue'
 
@@ -9,7 +9,7 @@ const service = new OpenExchangeRatesService()
 
 export interface State {
   names: CurrencyNames;
-  rates: LatestRates;
+  latest: LatestRates;
   loading: boolean;
 }
 
@@ -18,18 +18,29 @@ export const key: InjectionKey<Store<State>> = Symbol('App')
 export const store = createStore<State>({
   state: {
     names: EMPTY_CURRENCY_NAMES,
-    rates: EMPTY_LATEST_RATES,
+    latest: EMPTY_LATEST_RATES,
     loading: true
   },
   mutations: {
     updateCurrencyNames (state, names: CurrencyNames) {
       state.names = names
     },
-    updateCurrencyRates (state, rates: LatestRates) {
-      state.rates = rates
+    updateCurrencyRates (state, latest: LatestRates) {
+      state.latest = latest
     },
     updateLoadStatus (state, value: boolean) {
       state.loading = value
+    }
+  },
+  getters: {
+    currencyList (state): Currency[] {
+      return Object.entries(state.names).map(keyvalue => {
+        return {
+          code: keyvalue[0],
+          name: keyvalue[1],
+          rate: state.latest.rates[keyvalue[0]]
+        } as Currency
+      })
     }
   },
   actions: {
@@ -47,13 +58,13 @@ export const store = createStore<State>({
       return {}
     },
     async getCurrencyRates (context) {
-      const rates = await service.request.rates()
-      context.commit('updateCurrencyRates', rates)
-      return rates
+      const latest = await service.request.latest()
+      context.commit('updateCurrencyRates', latest)
+      return latest
     },
-    async updateCurrencyRates (context, rates: LatestRates) {
-      context.commit('updateCurrencyRates', rates)
-      return rates
+    async updateCurrencyRates (context, latest: LatestRates) {
+      context.commit('updateCurrencyRates', latest)
+      return latest
     },
     async resetCurrencyRates (context) {
       context.commit('updateCurrencyRates', {})

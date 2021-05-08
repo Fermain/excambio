@@ -5,7 +5,7 @@ declare module '@vue/runtime-core' {
   interface State {
     state: {
       names: CurrencyNames;
-      rates: LatestRates;
+      latest: LatestRates;
       loading: boolean;
     };
   }
