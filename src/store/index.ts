@@ -10,6 +10,7 @@ const service = new OpenExchangeRatesService()
 export interface State {
   names: CurrencyNames;
   latest: LatestRates;
+  selected: Currency[];
   loading: boolean;
 }
 
@@ -19,6 +20,7 @@ export const store = createStore<State>({
   state: {
     names: EMPTY_CURRENCY_NAMES,
     latest: EMPTY_LATEST_RATES,
+    selected: [],
     loading: true
   },
   mutations: {
@@ -30,6 +32,9 @@ export const store = createStore<State>({
     },
     updateLoadStatus (state, value: boolean) {
       state.loading = value
+    },
+    updateSelected (state, currencies: Currency[]) {
+      state.selected = currencies
     }
   },
   getters: {
@@ -73,6 +78,27 @@ export const store = createStore<State>({
     async updateLoadStatus (context, value: boolean) {
       context.commit('updateLoadStatus', value)
       return value
+    },
+    async pushSelected (context, value: Currency) {
+      const match = context.state.selected.find(currency => currency.code === value.code)
+      if (!match) {
+        context.commit('updateSelected', [
+          ...context.state.selected,
+          value
+        ])
+      }
+    },
+    async removeSelected (context, value: Currency) {
+      context.commit('updateSelected', context.state.selected.filter(currency => currency.code !== value.code))
+    },
+    async toggleSelected (context, value: Currency) {
+      const match = context.state.selected.find(currency => currency.code === value.code)
+
+      if (match) {
+        context.dispatch('removeSelected', value)
+      } else {
+        context.dispatch('pushSelected', value)
+      }
     }
   }
 })
