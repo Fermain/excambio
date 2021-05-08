@@ -8,10 +8,10 @@
     <tbody>
       <tr v-for="currency in currencies" :key="currency.code">
         <td>
-          <b>{{currency.code}}</b>
+          <b>{{ currency.code }}</b>
         </td>
         <td>
-          {{currency.name}}
+          {{ currency.name }}
         </td>
         <td>
           <code v-if="currency.rate">{{ currency.rate }}</code>
@@ -48,12 +48,19 @@ export default class ExchangeList extends Vue {
 table {
   border-spacing: 0;
 
-  th {
-    text-transform: capitalize;
-    text-align: left;
+  thead {
+    th {
+      text-transform: capitalize;
+      text-align: left;
+      position: sticky;
+      top: 4.25rem;
+      background: var(--color-dark);
+      color: var(--color-light);
+    }
   }
 
-  td, th {
+  td,
+  th {
     padding: 0.25rem;
   }
 
