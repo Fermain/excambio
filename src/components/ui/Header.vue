@@ -3,6 +3,7 @@
     <router-link class="logo" to="/">
       <Pangol />
     </router-link>
+    <input type="text" class="search" v-model="search" placeholder="Search">
     <router-link to="/">
       <h1>Excambio</h1>
     </router-link>
@@ -12,20 +13,31 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import Pangol from '@/components/brand/Pangol.vue'
+import { useStore } from 'vuex'
+import { key } from '@/store'
 
 @Options({
   components: {
     Pangol
   }
 })
-export default class UiHeader extends Vue {}
+export default class UiHeader extends Vue {
+  private store = useStore(key);
+
+  public set search (term: string) {
+    this.store.dispatch('setSearchTerm', term)
+  }
+
+  public get search () {
+    return this.store.state.search
+  }
+}
 </script>
 
 <style scoped lang="scss">
 .ui-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
   position: sticky;
   top: 0;
@@ -45,6 +57,14 @@ export default class UiHeader extends Vue {}
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  .search {
+    flex: 1;
+    margin: 0 0.5rem;
+    font-size: 2rem;
+    border: none;
+    background: none;
   }
 }
 </style>

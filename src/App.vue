@@ -63,6 +63,8 @@ export default class App extends Vue {
   flex: 1 0 auto;
   background: var(--color-light);;
   z-index: 9;
+  display: flex;
+  flex-direction: column;
 }
 
 .logo {

@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <exchange-list />
-    <exchange-pair />
   </div>
 </template>
 
@@ -18,3 +17,11 @@ import ExchangePair from '@/components/exchange/Pair.vue'
 })
 export default class Home extends Vue {}
 </script>
+
+<style lang="scss">
+.home {
+  background: var(--color-dark);
+  flex: 1;
+  display: flex;
+}
+</style>
