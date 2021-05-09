@@ -6,8 +6,6 @@ import * as getters from './getters'
 import * as mutations from './mutations'
 import { state, State } from './state'
 
-export * from './state'
-
 const vuexLocal = new VuexPersistence<State>({
   storage: window.localStorage
 })
@@ -19,3 +17,8 @@ export const store = createStore<State>({
   actions,
   plugins: [vuexLocal.plugin]
 })
+
+export * from './state'
+export * as getters from './getters'
+export * as mutations from './mutations'
+export * as actions from './actions'
