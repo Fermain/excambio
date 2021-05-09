@@ -16,11 +16,11 @@ jobs:
       - run: npm run build
       - run: |
           touch .env
-          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID }} >> .env
+          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID }} > .env
           cat .env
       - run: |
           touch .env.production
-          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID }} >> .env
+          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID }} > .env
           cat .env.production
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
