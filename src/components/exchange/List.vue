@@ -24,7 +24,7 @@
         </td>
       </tr>
     </thead>
-    <tbody>
+    <tbody v-if="currencies && currencies.length">
       <tr v-for="currency in currencies" :key="currency.code">
         <td @click="onSelect(currency)">
           <b>{{ currency.code }}</b>
@@ -42,6 +42,25 @@
         </td>
       </tr>
     </tbody>
+    <tbody v-else>
+      <tr v-if="loading">
+        <td colspan="4">
+          Loading data. Please wait.
+        </td>
+      </tr>
+
+      <tr v-if="!loading && allCurrencies.length && search">
+        <td colspan="4">
+          There were no matches for your search term: <code>{{ search }}</code>
+        </td>
+      </tr>
+
+      <tr v-else>
+        <td colspan="4">
+          There was an error retrieving data from the server.
+        </td>
+      </tr>
+    </tbody>
   </table>
 </template>
 
@@ -54,8 +73,16 @@ import { Currency, CurrencyRates } from '@/models'
 export default class ExchangeList extends Vue {
   private store = useStore(key);
 
+  public get search (): string {
+    return this.store.state.search
+  }
+
   public get selected (): Currency[] {
     return this.store.state.selected
+  }
+
+  public get allCurrencies (): Currency[] {
+    return this.store.getters.currencyList
   }
 
   public get currencies (): Currency[] {
