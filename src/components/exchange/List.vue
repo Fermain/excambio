@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="exchange-list">
     <thead>
       <tr v-if="currencies.length || selected.length">
         <th>Code</th>
