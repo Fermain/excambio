@@ -4,6 +4,7 @@
       <tr v-if="currencies.length || selected.length">
         <th>Code</th>
         <th>Name</th>
+        <th>Formatted</th>
         <th>Amount</th>
       </tr>
       <tr v-for="currency in selected" :key="currency.code" class="selection">
@@ -13,6 +14,7 @@
         <td @click="onRemove(currency)">
           {{ currency.name }}
         </td>
+        <td>{{ formatLocaleCurrency(values[currency.code], currency.code) }}</td>
         <td>
           <input
             type="number"
@@ -30,6 +32,7 @@
         <td @click="onSelect(currency)">
           {{ currency.name }}
         </td>
+        <td>{{ formatLocaleCurrency(values[currency.code], currency.code) }}</td>
         <td>
           <input
             type="number"
@@ -108,6 +111,10 @@ export default class ExchangeList extends Vue {
     const value = Number((target as HTMLInputElement).value)
     this.valueUSD = value / currency.rate
   }
+
+  public formatLocaleCurrency (value: number, code: string): string {
+    return new Intl.NumberFormat('xx-XX', { style: 'currency', currency: code }).format(value)
+  }
 }
 </script>
 
@@ -125,6 +132,14 @@ table {
       top: 4.25rem;
       background: var(--color-dark);
       color: var(--color-light);
+    }
+
+    tr {
+      &:first-child {
+        th {
+          z-index: 999;
+        }
+      }
     }
   }
 
