@@ -42,7 +42,7 @@
         </td>
       </tr>
     </tbody>
-    <tbody v-else>
+    <tbody v-else class="error">
       <tr v-if="loading">
         <td colspan="4">
           Loading data. Please wait.
@@ -193,7 +193,7 @@ table {
     }
   }
 
-  tr {
+  :not(.error) tr {
     &.selection,
     &:hover {
       td {
