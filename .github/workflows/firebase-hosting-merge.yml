@@ -20,4 +20,4 @@ jobs:
           projectId: excambio-2f1de
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
-          VUE_APP_OPENAPI_API_ID: '${{ OPENAPI_API_ID }}'
+          VUE_APP_OPENAPI_API_ID: '${{ secrets.OPENAPI_API_ID }}'
