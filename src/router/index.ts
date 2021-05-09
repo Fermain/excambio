@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/terms',
-    name: 'Terms of Use',
+    name: 'Terms',
     component: Terms
   }
 ]

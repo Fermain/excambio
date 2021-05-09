@@ -42,6 +42,7 @@ export default class App extends Vue {
   async mounted (): Promise<void> {
     await Promise.all([this.getCurrencyNames(), this.getCurrencyRates()])
     this.updateLoadStatus(false)
+    this.store.dispatch('applyQueryState')
   }
 }
 </script>

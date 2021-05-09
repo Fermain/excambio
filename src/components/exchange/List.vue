@@ -92,12 +92,16 @@ export default class ExchangeList extends Vue {
     return values
   }
 
-  public onSelect (currency: Currency) {
-    this.store.dispatch('pushSelected', currency)
+  public async onSelect (currency: Currency) {
+    await this.store.dispatch('pushSelected', currency)
   }
 
-  public onRemove (currency: Currency) {
-    this.store.dispatch('removeSelected', currency)
+  public async onRemove (currency: Currency) {
+    await this.store.dispatch('removeSelected', currency)
+  }
+
+  private onUpdate () {
+    this.store.dispatch('updateSearchParams')
   }
 
   public onValueChange ({ target }: Event, currency: Currency) {
@@ -143,6 +147,7 @@ table {
       background: none;
       width: 100%;
       color: var(--color-dark);
+      font-size: 1rem;
     }
   }
 
