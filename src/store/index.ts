@@ -5,6 +5,7 @@ import { InjectionKey } from 'vue'
 import VuexPersistence from 'vuex-persist'
 
 import { createStore, Store } from 'vuex'
+import router from '@/router'
 
 const service = new OpenExchangeRatesService()
 
@@ -67,6 +68,38 @@ export const store = createStore<State>({
         const fields = [currency.name, currency.code]
         return Boolean(fields.filter(field => field.toLowerCase().search(state.search.toLowerCase()) !== -1).length)
       })
+    },
+    searchParams (state): {
+      v?: string
+      c?: string
+      q?: string
+    } {
+      let params = {}
+
+      const codes = state.selected.map(currency => currency.code).filter(Boolean)
+
+      if (codes.length) {
+        if (state.value >= 1) {
+          params = {
+            ...params,
+            v: state.value.toFixed(0)
+          }
+        }
+
+        params = {
+          ...params,
+          c: codes.toString()
+        }
+      }
+
+      if (state.search) {
+        params = {
+          ...params,
+          q: state.search
+        }
+      }
+
+      return params
     }
   },
   actions: {
@@ -107,10 +140,12 @@ export const store = createStore<State>({
           ...context.state.selected,
           value
         ])
+        context.dispatch('updateSearchParams')
       }
     },
     async removeSelected (context, value: Currency) {
       context.commit('updateSelected', context.state.selected.filter(currency => currency.code !== value.code))
+      context.dispatch('updateSearchParams')
     },
     async toggleSelected (context, value: Currency) {
       const match = context.state.selected.find(currency => currency.code === value.code)
@@ -123,9 +158,38 @@ export const store = createStore<State>({
     },
     async setSearchTerm (context, term = '') {
       context.commit('setSearchTerm', term)
+      context.dispatch('updateSearchParams')
     },
     async setConversionValue (context, value = 1) {
       context.commit('setConversionValue', value)
+      context.dispatch('updateSearchParams')
+    },
+    async updateSearchParams (context) {
+      if (router.currentRoute.value.name) {
+        await router.push({
+          name: router.currentRoute.value.name,
+          query: context.getters.searchParams
+        })
+      }
+    },
+    async applyQueryState (context) {
+      const codes = (router.currentRoute.value.query.c as string)?.split(',')
+      const value = Number(router.currentRoute.value.query.v)
+      const term = router.currentRoute.value.query.q as string
+
+      if (codes && codes.length) {
+        codes.map(code => {
+          return context.getters.currencyList.find((currency: Currency) => currency.code === code)
+        }).filter(Boolean).forEach(currency => {
+          context.dispatch('pushSelected', currency)
+        })
+      }
+
+      if (value) {
+        context.dispatch('setConversionValue', value)
+      }
+
+      context.dispatch('setSearchTerm', term)
     }
   },
   plugins: [vuexLocal.plugin]
