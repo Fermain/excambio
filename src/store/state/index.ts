@@ -10,6 +10,7 @@ export interface State {
   latest: LatestRates;
   selected: Currency[];
   loading: boolean;
+  history: LatestRates[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol('Excambio')
@@ -20,5 +21,6 @@ export const state = {
   names: EMPTY_CURRENCY_NAMES,
   latest: EMPTY_LATEST_RATES,
   selected: new Array<Currency>(),
-  loading: true
+  loading: true,
+  history: new Array<LatestRates>()
 }
