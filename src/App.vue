@@ -76,4 +76,10 @@ export default class App extends Vue {
 .page {
   padding: 0.5rem;
 }
+
+.button {
+  padding: 0.5rem;
+  border: 1px solid;
+  margin: 0 0.25rem;
+}
 </style>
