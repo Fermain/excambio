@@ -3,7 +3,22 @@
     <router-link class="logo" to="/">
       <Pangol />
     </router-link>
-    <input type="text" class="search" v-model="search" placeholder="Search">
+    <input
+      type="text"
+      class="search"
+      v-model="search"
+      placeholder="Search"
+      v-if="showSearch"
+    />
+    <router-link class="button" to="/history" v-if="showButton"
+      >View History</router-link
+    >
+    <div class="chart-buttons" v-if="!showSearch">
+      <router-link class="button" :to="{name: 'History', query: { unit: 'day', units: 1 }}">1 Days</router-link>
+      <router-link class="button" :to="{name: 'History', query: { unit: 'day', units: 7 }}">7 Days</router-link>
+      <router-link class="button" :to="{name: 'History', query: { unit: 'month', units: 1 }}">1 Month</router-link>
+      <router-link class="button" :to="{name: 'History', query: { unit: 'month', units: 3 }}">3 Months</router-link>
+    </div>
     <router-link to="/">
       <h1>Excambio</h1>
     </router-link>
@@ -31,6 +46,14 @@ export default class UiHeader extends Vue {
   public get search () {
     return this.store.state.search
   }
+
+  public get showButton () {
+    return this.$route.name !== 'History' && this.store.state.selected.length
+  }
+
+  public get showSearch () {
+    return this.$route.name === 'Home'
+  }
 }
 </script>
 
@@ -38,6 +61,7 @@ export default class UiHeader extends Vue {
 .ui-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   position: sticky;
   top: 0;
@@ -65,6 +89,11 @@ export default class UiHeader extends Vue {
     font-size: 2rem;
     border: none;
     background: none;
+  }
+
+  .chart-buttons {
+    flex: 1;
+    text-align: center;
   }
 }
 </style>

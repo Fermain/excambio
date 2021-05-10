@@ -24,3 +24,18 @@ export function setSearchTerm (state: State, term: string): void {
 export function setConversionValue (state: State, value: number): void {
   state.value = value
 }
+
+export function setHistoricalRate (state: State, value: LatestRates): void {
+  const factor = 86400
+  const match = state.history.find(entry => Math.round(entry.timestamp / factor) === Math.round(value.timestamp / factor))
+  if (!match) {
+    state.history = [
+      ...state.history,
+      value
+    ]
+  }
+}
+
+export function resetHistoricalRates (state: State): void {
+  state.history = []
+}

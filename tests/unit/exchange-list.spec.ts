@@ -10,7 +10,7 @@ test('Loads list with default data', async () => {
       }
     }
   })
-  
+
   // Check if the wrapper has child component
   expect(wrapper.getComponent('table.exchange-list').html()).toBeTruthy()
   // Check that the table has at least one row
