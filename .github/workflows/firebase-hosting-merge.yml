@@ -14,11 +14,11 @@ jobs:
       - run: npm ci
       - run: |
           touch .env
-          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID }} > .env
+          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID_ALT }} > .env
           cat .env
       - run: |
           touch .env.production
-          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID }} > .env
+          echo VUE_APP_OPENAPI_API_ID=${{ secrets.OPENAPI_API_ID_ALT }} > .env
           cat .env.production
       - run: npm run test
       - run: npm run build
