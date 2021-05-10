@@ -1,8 +1,8 @@
 <template>
   <header class="ui-header">
-    <router-link class="logo" to="/">
+    <a class="logo" href="/">
       <Pangol />
-    </router-link>
+    </a>
     <input
       type="text"
       class="search"
@@ -19,9 +19,9 @@
       <router-link class="button" :to="{name: 'History', query: { unit: 'month', units: 1 }}">1 Month</router-link>
       <router-link class="button" :to="{name: 'History', query: { unit: 'month', units: 3 }}">3 Months</router-link>
     </div>
-    <router-link to="/">
+    <a href="/">
       <h1>Excambio</h1>
-    </router-link>
+    </a>
   </header>
 </template>
 

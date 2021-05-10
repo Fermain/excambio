@@ -1,8 +1,8 @@
 <template>
   <footer class="ui-footer">
-    <router-link class="logo" to="/">
+    <a class="logo" href="/">
       <Pangol />
-    </router-link>
+    </a>
     <nav>
       <router-link to="/terms">Terms of Use</router-link>
     </nav>
