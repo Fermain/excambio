@@ -1,5 +1,6 @@
 import { EMPTY_CURRENCY_NAMES, EMPTY_LATEST_RATES } from '@/data'
 import { CurrencyNames, LatestRates } from '@/models'
+import moment from 'moment'
 
 export class OpenExchangeRatesService {
   private baseUrl: URL;
@@ -67,16 +68,38 @@ export class OpenExchangeRatesService {
   }
 
   /**
+   * ## GET historical conversion rates for all pairs in base currency for a given date
+   * _Returns a list of all supported currencies, and their spot rates relative to the base currency for this App ID (USD)._
+   *
+   */
+  private async getHistoricalRates (date: Date): Promise<LatestRates> {
+    const dateFormatted = moment(date).format('YYYY-MM-DD')
+
+    const url = new URL(`api/historical/${dateFormatted}.json`, this.baseUrl)
+    url.searchParams.append('app_id', process.env.VUE_APP_OPENAPI_API_ID)
+
+    return await this.fetch<LatestRates>(
+      url,
+      {
+        method: 'GET'
+      },
+      EMPTY_LATEST_RATES
+    )
+  }
+
+  /**
    * ## Public Proxy Interface for this service
    *
    */
   public get request (): {
     latest: () => Promise<LatestRates>;
     names: () => Promise<CurrencyNames>;
+    history: (date: Date) => Promise<LatestRates>;
     } {
     return {
       latest: () => this.getLatestRates(),
-      names: () => this.getSupportedCurrencies()
+      names: () => this.getSupportedCurrencies(),
+      history: (date: Date) => this.getHistoricalRates(date)
     }
   }
 }
