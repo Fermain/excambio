@@ -1,7 +1,7 @@
 <template>
   <apexchart
     type="line"
-    v-if="ready"
+    v-if="ready && series.length"
     :options="chartOptions"
     :series="series"
   ></apexchart>
